@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: Self-awareness (power consumption) API
+  description: Self-awareness (power consumption) API documentation (aeriOS).
+  version: 1.3.3
+
+servers:
+  - url: 'http://localhost:8003'
+
+paths:
+  /sampling_frequency:
+    post:
+      tags:
+        - Context Information Provision
+      summary: Updating of the sampling frequency
+      requestBody:
+        description: Payload body in the request contains a JSON object which represents the sampling frequency that is to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SamplingFrequency'
+      responses:
+        '200':
+          description: OK.
+        '400':
+          description: Bad request.
+
+components:
+  schemas:
+    SamplingFrequency:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: integer
