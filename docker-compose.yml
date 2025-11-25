@@ -1,0 +1,41 @@
+services:
+  aerios_self-awareness_hardware-info_svc:
+    container_name: aerios_self-awareness_hardware-info_ctr
+    image: eclipseaerios/self-awareness-hardware-info:1.4.4
+    privileged: true
+    network_mode: "host"
+    environment:
+      - AERIOS_VERBOSE=true
+      - AERIOS_AUTHORIZATION=false
+      - AERIOS_KEYCLOAK_URL=
+      - AERIOS_KEYCLOAK_REALM=
+      - AERIOS_KRAKEND_URL=
+      - AERIOS_CB_CLIENT_ID=
+      - AERIOS_CB_CLIENT_SECRET=
+      - AERIOS_ORION_URL=
+      - AERIOS_CONTAINER_TECHNOLOGY=Docker
+      - AERIOS_IE_GPU=
+      - AERIOS_IE_GPU_MEMORY=
+      - AERIOS_IE_NET_SPEED_TEST=false
+      - AERIOS_POWER_SOURCE=
+      - AERIOS_ENERGY_EFFICIENCY_RATIO=
+      - AERIOS_IE_LOCATION=[0.0,0.0]
+      - AERIOS_IE_IP=
+
+  aerios_self-awareness_power-consumption_svc:
+    container_name: aerios_self-awareness_power-consumption_ctr
+    image: eclipseaerios/self-awareness-power-consumption:1.3.3
+    privileged: true
+    network_mode: "host"
+    depends_on:
+      - aerios_self-awareness_hardware-info_svc
+    environment:
+      - AERIOS_VERBOSE=true
+      - AERIOS_AUTHORIZATION=false
+      - AERIOS_KEYCLOAK_URL=
+      - AERIOS_KEYCLOAK_REALM=
+      - AERIOS_KRAKEND_URL=
+      - AERIOS_CB_CLIENT_ID=
+      - AERIOS_CB_CLIENT_SECRET=
+      - AERIOS_ORION_URL=
+      - AERIOS_IE_IP=
