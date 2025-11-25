@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "hardwareinfo.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "hardwareinfo.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "hardwareinfo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "hardwareinfo.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.hardwareinfo.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.chartNodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if not .Values.chartNodeSelector }}
+        {{- with .Values.hardwareinfo.nodeSelector }}
+      nodeSelector:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.hardwareinfo.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.hardwareinfo.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.hardwareinfo.podSecurityContext | nindent 8 }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: hardwareinfo
+          securityContext:
+            {{- toYaml .Values.hardwareinfo.securityContext | nindent 12 }}
+          image: "{{ .Values.hardwareinfo.image.repository }}:{{ .Values.hardwareinfo.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.hardwareinfo.image.pullPolicy }}
+          ports:
+            - containerPort: 8002
+              hostPort: 8002
+          resources:
+            {{- toYaml .Values.hardwareinfo.resources | nindent 12 }}
+          {{- with .Values.hardwareinfo.envVars }}
+          env:
+            - name: AERIOS_VERBOSE
+              value: {{ .verbose | quote }}
+            - name: AERIOS_AUTHORIZATION
+              value: {{ .authorization | quote }}
+            - name: AERIOS_KEYCLOAK_URL
+              value: {{ .keycloakUrl | quote }}
+            - name: AERIOS_KEYCLOAK_REALM
+              value: {{ .keycloakRealm | quote }}
+            - name: AERIOS_KRAKEND_URL
+              value: {{ .krakendUrl | quote }}
+            - name: AERIOS_CB_CLIENT_ID
+              value: {{ .cbClientId | quote }}
+            - name: AERIOS_CB_CLIENT_SECRET
+              value: {{ .cbClientSecret | quote }}
+            - name: AERIOS_ORION_URL
+              value: {{ .orionUrl | quote }}
+            - name: AERIOS_CONTAINER_TECHNOLOGY
+              value: "Kubernetes"
+            - name: AERIOS_IE_GPU
+              value: {{ .ieGpu | quote }}
+            - name: AERIOS_IE_GPU_MEMORY
+              value: {{ .ieGpuMemory | quote }}
+            - name: AERIOS_POWER_SOURCE
+              value: {{ .powerSource | quote }}
+            - name: AERIOS_ENERGY_EFFICIENCY_RATIO
+              value: {{ .energyEfficiencyRatio | quote }}
+            - name: AERIOS_IE_NET_SPEED_TEST
+              value: {{ .ieNetSpeedTest | quote }}
+            - name: AERIOS_IE_LOCATION
+              value: {{ .ieLocation | quote }}
+            - name: AERIOS_IE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          {{- end }}

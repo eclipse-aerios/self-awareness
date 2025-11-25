@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: 1.4.4
+description: Self-awareness module of the aeriOS Self-* components
+keywords:
+- ravaga-helm-chart-generator
+- aeriOS
+- self-*
+- metrics
+name: self-awareness
+type: application
+version: 1.4.4

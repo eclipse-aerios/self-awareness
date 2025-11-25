@@ -1,0 +1,136 @@
+# Default values for enabler.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# String to partially override enabler.fullname template (will maintain the release name).
+nameOverride: ""
+# String to fully override enabler.fullname template.
+fullnameOverride: ""
+# Deploy all the components in specific K8s node(s).
+chartNodeSelector: {}
+
+# Enable the deployment of the power-consumption module
+enablePowerConsumption: true
+
+# Component hardwareinfo values.
+hardwareinfo:
+  tier: external
+  replicaCount: 1
+
+  # Configuration of the container image.
+  imagePullSecrets: []
+  image:
+    repository: eclipseaerios/self-awareness-hardware-info
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+    pullPolicy: Always
+
+  resources: {}
+  autoscaling:
+    enabled: false
+
+  podSecurityContext: {}
+  securityContext:
+    privileged: true
+
+  # Include here the environment variables to be used in containers section of the component's manifest.
+  envVars:
+    verbose: true
+    authorization: false
+    keycloakUrl: ""
+    keycloakRealm: ""
+    krakendUrl: ""
+    cbClientId: ""
+    cbClientSecret: ""
+    orionUrl: http://orion-ld-broker.default.svc.cluster.local:1026
+    ieGpu: false
+    ieGpuMemory: -1
+    powerSource: "urn:ngsi-ld:none"
+    energyEfficiencyRatio: 0
+    ieNetSpeedTest: false
+    ieLocation: "[0.0,0.0]"
+
+  # Configure this parameters to deploy the component in specific K8s node(s).
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Component powerconsumptionamd64 values.
+powerconsumptionamd64:
+  tier: internal
+  replicaCount: 1
+
+  # Configuration of the container image.
+  imagePullSecrets: []
+  image:
+    repository: eclipseaerios/self-awareness-powerconsumption_amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "1.3.3"
+    pullPolicy: Always
+
+  resources: {}
+  autoscaling:
+    enabled: false
+
+  podSecurityContext: {}
+  securityContext:
+    privileged: true
+
+  # Enable the deployment of the power-consumption module for AMD64
+  enabled: true
+
+  # Include here the environment variables to be used in containers section of the component's manifest.
+  envVars:
+    verbose: true
+    authorization: false
+    keycloakUrl: ""
+    keycloakRealm: ""
+    krakendUrl: ""
+    cbClientId: ""
+    cbClientSecret: ""
+    orionUrl: http://orion-ld-broker.default.svc.cluster.local:1026
+
+  # Configure this parameters to deploy the component in specific K8s node(s).
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Component powerconsumptionarm64 values.
+powerconsumptionarm64:
+  tier: internal
+  replicaCount: 1
+
+  # Configuration of the container image.
+  imagePullSecrets: []
+  image:
+    repository: eclipseaerios/self-awareness-powerconsumption_arm64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "1.3.3"
+    pullPolicy: Always
+
+  resources: {}
+  autoscaling:
+    enabled: false
+
+  podSecurityContext: {}
+  securityContext:
+    privileged: true
+
+  # Enable the deployment of the power-consumption module for ARM64
+  enabled: true
+
+  # Include here the environment variables to be used in containers section of the component's manifest.
+  envVars:
+    verbose: true
+    authorization: false
+    keycloakUrl: ""
+    keycloakRealm: ""
+    krakendUrl: ""
+    cbClientId: ""
+    cbClientSecret: ""
+    orionUrl: http://orion-ld-broker.default.svc.cluster.local:1026
+
+  # Configure this parameters to deploy the component in specific K8s node(s).
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

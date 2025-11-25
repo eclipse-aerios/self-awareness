@@ -1,0 +1,80 @@
+{{- if and .Values.enablePowerConsumption (.Values.powerconsumptionarm64.enabled) }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "powerconsumptionarm64.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "powerconsumptionarm64.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "powerconsumptionarm64.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "powerconsumptionarm64.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.powerconsumptionarm64.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.chartNodeSelector }}
+      nodeSelector:
+        kubernetes.io/arch: arm64
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if not .Values.chartNodeSelector }}
+      nodeSelector:
+        kubernetes.io/arch: arm64
+        {{- with .Values.powerconsumptionarm64.nodeSelector }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.powerconsumptionarm64.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.powerconsumptionarm64.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.powerconsumptionarm64.podSecurityContext | nindent 8 }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: powerconsumption
+          securityContext:
+            {{- toYaml .Values.powerconsumptionarm64.securityContext | nindent 12 }}
+          image: "{{ .Values.powerconsumptionarm64.image.repository }}:{{ .Values.powerconsumptionarm64.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.powerconsumptionarm64.image.pullPolicy }}
+          ports:
+            - containerPort: 8003
+              hostPort: 8003
+          resources:
+            {{- toYaml .Values.powerconsumptionarm64.resources | nindent 12 }}
+          {{- with .Values.powerconsumptionarm64.envVars }}
+          env:
+            - name: AERIOS_VERBOSE
+              value: {{ .verbose | quote }}
+            - name: AERIOS_AUTHORIZATION
+              value: {{ .authorization | quote }}
+            - name: AERIOS_KEYCLOAK_URL
+              value: {{ .keycloakUrl | quote }}
+            - name: AERIOS_KEYCLOAK_REALM
+              value: {{ .keycloakRealm | quote }}
+            - name: AERIOS_KRAKEND_URL
+              value: {{ .krakendUrl | quote }}
+            - name: AERIOS_CB_CLIENT_ID
+              value: {{ .cbClientId | quote }}
+            - name: AERIOS_CB_CLIENT_SECRET
+              value: {{ .cbClientSecret | quote }}
+            - name: AERIOS_ORION_URL
+              value: {{ .orionUrl | quote }}
+            - name: AERIOS_IE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          {{- end }}
+{{- end }}
