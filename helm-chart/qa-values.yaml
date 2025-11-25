@@ -63,7 +63,7 @@ powerconsumptionamd64:
   # Configuration of the container image.
   imagePullSecrets: []
   image:
-    repository: eclipseaerios/self-awareness-powerconsumption_amd64
+    repository: eclipseaerios/self-awareness-power-consumption
     # Overrides the image tag whose default is the chart appVersion.
     tag: "1.3.3"
     pullPolicy: Always
@@ -103,7 +103,7 @@ powerconsumptionarm64:
   # Configuration of the container image.
   imagePullSecrets: []
   image:
-    repository: eclipseaerios/self-awareness-powerconsumption_arm64
+    repository: eclipseaerios/self-awareness-power-consumption
     # Overrides the image tag whose default is the chart appVersion.
     tag: "1.3.3"
     pullPolicy: Always
