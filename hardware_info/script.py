@@ -36,14 +36,14 @@ def get_token():
             return json.loads(response.text)['access_token']
         else:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the access token in Keycloak. Aborting execution...')
-                print('Keycloak error:', response.text, sep='\n')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the access token in Keycloak. Aborting execution...', flush=True)
+                print('Keycloak error:', response.text, sep='\n', flush=True)
 
             sys.exit(1)
     except Exception as e:
         if os.environ['AERIOS_VERBOSE'] == "true":
-            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the access token in Keycloak. Aborting execution...')
-            print('Keycloak error:', e, sep='\n')
+            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the access token in Keycloak. Aborting execution...', flush=True)
+            print('Keycloak error:', e, sep='\n', flush=True)
 
         sys.exit(1)
 
@@ -66,7 +66,7 @@ async def self_task():
         disk = next((device for device in devices if device['type'] == 'disk'), None)
     except:
         if os.environ['AERIOS_VERBOSE'] == "true":
-            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the disk type of the Infrastructure Element. Using an empty value...')
+            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the disk type of the Infrastructure Element. Using an empty value...', flush=True)
 
     if disk is None:
         disk_type = ''
@@ -93,7 +93,7 @@ async def self_task():
                 physical_interfaces.append(interface['ifname'])
     except:
         if os.environ['AERIOS_VERBOSE'] == "true":
-            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the physical interfaces of the Infrastructure Element. Using an empty value...')
+            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the physical interfaces of the Infrastructure Element. Using an empty value...', flush=True)
 
     power_source = os.environ['AERIOS_POWER_SOURCE'] if 'AERIOS_POWER_SOURCE' in os.environ else 'urn:ngsi-ld:none'
 
@@ -129,14 +129,14 @@ async def self_task():
             domain = json.loads(response.text)[0]['id']
         else:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity Domain from Orion. It is not possible to create the entity associated with this Infrastructure Element in Orion. Aborting execution...')
-                print('Orion error:', response.text, sep='\n')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity Domain from Orion. It is not possible to create the entity associated with this Infrastructure Element in Orion. Aborting execution...', flush=True)
+                print('Orion error:', response.text, sep='\n', flush=True)
 
             sys.exit(1)
     except Exception as e:
         if os.environ['AERIOS_VERBOSE'] == "true":
-            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity Domain from Orion. It is not possible to create the entity associated with this Infrastructure Element in Orion. Aborting execution...')
-            print('Orion error:', e, sep='\n')
+            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity Domain from Orion. It is not possible to create the entity associated with this Infrastructure Element in Orion. Aborting execution...', flush=True)
+            print('Orion error:', e, sep='\n', flush=True)
 
         sys.exit(1)
 
@@ -151,12 +151,12 @@ async def self_task():
         if response.status_code == 200:
             exists_ie = True
         elif os.environ['AERIOS_VERBOSE'] == "true":
-            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity InfrastructureElement from Orion. The entity does not exist. Creating a new one...')
-            print('Orion error:', response.text, sep='\n')
+            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity InfrastructureElement from Orion. The entity does not exist. Creating a new one...', flush=True)
+            print('Orion error:', response.text, sep='\n', flush=True)
     except Exception as e:
         if os.environ['AERIOS_VERBOSE'] == "true":
-            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity InfrastructureElement from Orion. The entity does not exist. Creating a new one...')
-            print('Orion error:', e, sep='\n')
+            print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to get the entity InfrastructureElement from Orion. The entity does not exist. Creating a new one...', flush=True)
+            print('Orion error:', e, sep='\n', flush=True)
 
     orion_headers['Content-Type'] = 'application/json'
 
@@ -167,7 +167,7 @@ async def self_task():
                 internal_ip_address = sckt.getsockname()[0]
         except:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the internal IP address of the Infrastructure Element. Using an empty value...')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the internal IP address of the Infrastructure Element. Using an empty value...', flush=True)
 
             internal_ip_address = ''
 
@@ -362,14 +362,14 @@ async def self_task():
 
             if response.status_code != 201:
                 if os.environ['AERIOS_VERBOSE'] == "true":
-                    print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to create the entity InfrastructureElement in Orion. Aborting execution...')
-                    print('Orion error:', response.text, sep='\n')
+                    print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to create the entity InfrastructureElement in Orion. Aborting execution...', flush=True)
+                    print('Orion error:', response.text, sep='\n', flush=True)
 
                 sys.exit(1)
         except Exception as e:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to create the entity InfrastructureElement in Orion. Aborting execution...')
-                print('Orion error:', e, sep='\n')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to create the entity InfrastructureElement in Orion. Aborting execution...', flush=True)
+                print('Orion error:', e, sep='\n', flush=True)
 
             sys.exit(1)
 
@@ -404,10 +404,10 @@ async def self_task():
             response = requests.post(url='http://' + os.environ['AERIOS_IE_IP'] + ':8001/data', data=json.dumps(self_payload), headers=self_headers, timeout=5)
 
             if response.status_code != 201 and os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.', flush=True)
         except:
             if os.environ['AERIOS_VERBOSE'] == "true":
-               print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.')
+               print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.', flush=True)
 
     while True:
         current_cpu_usage = math.ceil(psutil.cpu_percent(interval=1))
@@ -437,7 +437,7 @@ async def self_task():
             net_traffic_down = round((final_recv - initial_recv) / 1000000, 2)
         else:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the network traffic of the Infrastructure Element. Using an empty value...')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the network traffic of the Infrastructure Element. Using an empty value...', flush=True)
 
             net_lost_packages = -1
             net_traffic_up = -1.0
@@ -451,7 +451,7 @@ async def self_task():
                 net_speed_down = round(speed_test.download(threads=1) / 1000000)
             except:
                 if os.environ['AERIOS_VERBOSE'] == "true":
-                    print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the network speed of the Infrastructure Element. Using an empty value...')
+                    print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the network speed of the Infrastructure Element. Using an empty value...', flush=True)
 
                 net_speed_up = -1
                 net_speed_down = -1
@@ -468,7 +468,7 @@ async def self_task():
             current_disk_usage_pct = math.ceil(disk_usage.percent)
         else:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the disk usage of the Infrastructure Element. Using an empty value...')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to obtain the disk usage of the Infrastructure Element. Using an empty value...', flush=True)
 
             disk_capacity = -1
             available_disk = -1
@@ -553,20 +553,20 @@ async def self_task():
 
                 if response.status_code == 401:
                     if os.environ['AERIOS_VERBOSE'] == "true":
-                        print(datetime.now().isoformat()[:19] + ' - An authorization error occurred while trying to update the entity InfrastructureElement in Orion. Aborting execution...')
-                        print('Orion error:', response.text, sep='\n')
+                        print(datetime.now().isoformat()[:19] + ' - An authorization error occurred while trying to update the entity InfrastructureElement in Orion. Aborting execution...', flush=True)
+                        print('Orion error:', response.text, sep='\n', flush=True)
 
                     sys.exit(1)
                 elif response.status_code != 204 and os.environ['AERIOS_VERBOSE'] == "true":
-                    print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the entity InfrastructureElement in Orion.')
-                    print('Orion error:', response.text, sep='\n')
+                    print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the entity InfrastructureElement in Orion.', flush=True)
+                    print('Orion error:', response.text, sep='\n', flush=True)
             elif response.status_code != 204 and os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the entity InfrastructureElement in Orion.')
-                print('Orion error:', response.text, sep='\n')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the entity InfrastructureElement in Orion.', flush=True)
+                print('Orion error:', response.text, sep='\n', flush=True)
         except Exception as e:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the entity InfrastructureElement in Orion.')
-                print('Orion error:', e, sep='\n')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the entity InfrastructureElement in Orion.', flush=True)
+                print('Orion error:', e, sep='\n', flush=True)
 
         self_payload = {
             'id': 'urn:ngsi-ld:InfrastructureElement:' + domain[domain.rfind(':') + 1 : ] + ':' + mac_address.replace(':', ''),
@@ -603,10 +603,10 @@ async def self_task():
             response = requests.post(url='http://' + os.environ['AERIOS_IE_IP'] + ':8001/data', data=json.dumps(self_payload), headers=self_headers, timeout=5)
 
             if response.status_code != 201 and os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.', flush=True)
         except:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the facts through the Self-orchestrator.', flush=True)
 
         self_payload = {
             'id': 'urn:ngsi-ld:InfrastructureElement:' + domain[domain.rfind(':') + 1 : ] + ':' + mac_address.replace(':', ''),
@@ -631,10 +631,10 @@ async def self_task():
             response = requests.post(url='http://' + os.environ['AERIOS_IE_IP'] + ':8090/optimize', data=json.dumps(self_payload), headers=self_headers, timeout=30)
 
             if response.status_code != 200 and os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the data in the Self-optimisation and adaptation.')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the data in the Self-optimisation and adaptation.', flush=True)
         except:
             if os.environ['AERIOS_VERBOSE'] == "true":
-                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the data in the Self-optimisation and adaptation.')
+                print(datetime.now().isoformat()[:19] + ' - An error occurred while trying to update the data in the Self-optimisation and adaptation.', flush=True)
 
         await asyncio.sleep(sampling_frequency)
 
